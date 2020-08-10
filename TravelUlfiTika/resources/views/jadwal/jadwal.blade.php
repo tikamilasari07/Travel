@@ -1,0 +1,72 @@
+@extends('layouts.admin')
+@section('content')
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+            @if(Session::has('success'))
+            <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+                <span class="badge badge-pill badge-success">Success</span>
+                {{ Session::get('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @elseif(Session::has('error'))
+            <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+                <span class="badge badge-pill badge-danger">Error</span>
+                {{ Session::get('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+            </div>
+            @endif
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Data Jadwal</strong>
+                    </div>
+                    <div class="card-body">
+                        <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Supir</th>
+                                    <th>Merk Mobil</th>
+                                    <th>Dari</th>
+                                    <th>Tujuan</th>
+                                    <th>Tanggal</th>
+                                    <th>Jam</th>
+                                    <th>Harga Tiket</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach($data as $value)
+                                <tr>
+                                    <td>{{ $value->getDataSupir->nama_supir }}</td>
+                                    <td>{{ $value->getDataCar->merk_mobil }}</td>
+                                    <td>{{ $value->getDataWilayahAsal->nama_wilayah }}</td>
+                                    <td>{{ $value->getDataWilayahTujuan->nama_wilayah }}</td>
+                                    <td>{{ $value->tanggal }}</td>
+                                    <td>{{ $value->jam }}</td>
+                                    <td>{{ $value->harga_tiket }}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="{{ url('/jadwal/edit/'.$value->id) }}">Edit</a>
+                                         <form action="{{ url('/jadwal/delete/'.$value->id) }}" method="POST">
+                                        <form action="" method="POST">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="submit" onclick="return confirm('Apakah anda yakin akan menghapus data ini ?')" class="btn btn-danger btn-sm" value="Delete"/>
+                                        </form>  
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- .animated -->
+</div>
+@endsection
